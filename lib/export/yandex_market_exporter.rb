@@ -13,13 +13,13 @@ module Export
     end
     
     def export
-      @config = SpreeYandexMarket::Config.instance
-      @host = @config.preferred_url.sub(%r[^http://],'').sub(%r[/$], '')
+      @config = SpreeYandexMarket::Config
+      @host = @config[:url].sub(%r[^http://],'').sub(%r[/$], '')
 
-      @currencies = @config.preferred_currency.split(';').map{ |x| x.split(':') }
+      @currencies = @config[:currency].split(';').map{ |x| x.split(':') }
       @currencies.first[1] = 1
       
-      @preferred_category = Taxon.find_by_name(@config.preferred_category)
+      @preferred_category = Spree::Taxon.find_by_name(@config[:category])
       unless @preferred_category.export_to_yandex_market
         raise "Preferred category <#{@preferred_category.name}> not included to export"
       end
@@ -34,13 +34,13 @@ module Export
 
         xml.yml_catalog(:date => Time.now.to_s(:ym)) {
           xml.shop { # описание магазина
-            xml.name      @config.preferred_short_name
-            xml.company   @config.preferred_full_name
-            xml.url       @config.preferred_url
-            xml.platform  @config.preferred_platform
-            xml.version   @config.preferred_version
-            xml.agency    @config.preferred_agency
-            xml.email     @config.preferred_email
+            xml.name      @config[:short_name]
+            xml.company   @config[:full_name]
+            xml.url       @config[:url]
+            xml.platform  @config[:platform]
+            xml.version   @config[:version]
+            xml.agency    @config[:agency]
+            xml.email     @config[:email]
             
             xml.currencies { # описание используемых валют в магазине
               @currencies && @currencies.each do |curr|
@@ -59,7 +59,7 @@ module Export
             }
 
             xml.offers { # список товаров
-              products = Product.in_taxon(@preferred_category).active.master_price_gte(1).uniq
+              products = Spree::Product.in_taxon(@preferred_category).active.master_price_gte(1).uniq
               products.each do |product|
                 offer_vendor_model(xml, product)
               end

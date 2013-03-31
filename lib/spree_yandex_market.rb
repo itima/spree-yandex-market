@@ -20,7 +20,7 @@ module SpreeYandexMarket
 #      load File.join(File.dirname(__FILE__), "tasks/yandex_market.rake")
 #    end
 
-    initializer "yandex_market.preferences",  :before => :load_config_initializers do |app|
+    initializer "spree_yandex_market.preferences",  :before => :load_config_initializers do |app|
       SpreeYandexMarket::Config = Spree::YandexMarketConfiguration.new
     end
 

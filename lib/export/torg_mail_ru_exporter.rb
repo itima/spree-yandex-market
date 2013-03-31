@@ -13,14 +13,14 @@ module Export
     
     def export
       # @config = ::TorgMailRu.find_or_create_by_name('Default configuration')
-      @config = SpreeYandexMarket::Config.instance
-      @host = @config.preferred_url.sub(%r[^http://],'').sub(%r[/$], '')
-      ActionController::Base.asset_host = @config.preferred_url
+      @config = SpreeYandexMarket::Config
+      @host = @config[:url].sub(%r[^http://],'').sub(%r[/$], '')
+      ActionController::Base.asset_host = @config[:url]
       
-      @currencies = @config.preferred_currency.split(';').map{|x| x.split(':')}
+      @currencies = @config[:currency].split(';').map{|x| x.split(':')}
       @currencies.first[1] = 1
       
-      @categories = Taxon.find_by_name(@config.preferred_category)
+      @categories = Taxon.find_by_name(@config[:category])
       @categories = @categories.self_and_descendants
       @categories_ids = @categories.collect { |x| x.id }
       
@@ -28,8 +28,8 @@ module Export
         xml.torg_price(:date => Time.now.to_s(:ym)) {
           
           xml.shop { # описание магазина
-            xml.shopname    @config.preferred_short_name
-            xml.company @config.preferred_full_name
+            xml.shopname    @config[:short_name]
+            xml.company @config[:full_name]
             xml.url     path_to_url('')
             
             xml.currencies { # описание используемых валют в магазине
@@ -49,7 +49,7 @@ module Export
             }
             xml.offers { # список товаров
               @categories && @categories.each do |cat|
-                products = @config.preferred_wares == "on_hand" ? cat.products.active.on_hand : cat.products.active      
+                products = @config[:wares] == "on_hand" ? cat.products.active.on_hand : cat.products.active
                 products && products.each do |product|
                   offer(xml,product, cat) if (product and product.master and product.master.price > 0)
                 end
@@ -99,9 +99,9 @@ module Export
       xml.offer(opt) {
         shared_xml(xml, product, cat)
         xml.delivery_type       '1'
-        xml.delivery_cost       @config.preferred_local_delivery_cost 
+        xml.delivery_cost       @config[:local_delivery_cost]
         xml.name                product.name
-        xml.vendor product_properties[@config.preferred_vendor] if product_properties[@config.preferred_vendor]    
+        xml.vendor product_properties[@config[:vendor]] if product_properties[@config[:vendor]]
         xml.description         product.description
       }
     end

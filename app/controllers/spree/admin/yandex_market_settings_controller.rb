@@ -38,8 +38,9 @@ module Spree
     end
 
     def update
-      @config.attributes = params[:preferences]
-      @config.save!
+       params[:preferences].each do |name, value|
+         SpreeYandexMarket::Config.set_preference(name.to_sym, value) if value.present?
+       end
 
       respond_to do |format|
         format.html {
@@ -51,7 +52,7 @@ module Spree
     private
 
     def get_config
-      @config = SpreeYandexMarket::Config
+      SpreeYandexMarket::Config
     end
   end
 
