@@ -75,40 +75,28 @@ module Export
       opt = { 
         :id         => product.id,
         :available  => (product.has_stock?) ? true : false
+        #, :type => 'vendor.model'
       }
         
       xml.offer(opt) do
         xml.url path_to_url("products/#{product.permalink}")
         xml.price product.price
         xml.currencyId @currencies.first.first
-        xml.categoryId product.cat.id
+        xml.categoryId product.taxons.first.id
         product.images.take(10).each do |image|
           xml.picture path_to_url(image.attachment.url(:large, false))
         end
         xml.store true 
         xml.pickup true
         xml.delivery true
-        xml.name "Настольная игра \"#{product.name}\""
+        xml.name "#{product.name}"
         xml.description strip_tags(product.description) if product.description
-        xml.param players_count_info(product), :name => "Количество игроков"
-        xml.param product.age, :name => 'Рекомендуемый возраст' if product.age
-        xml.param product.learning_time, :name => 'Сложность правил' if product.learning_time
-        xml.param product.gaming_time, :name => 'Продолжительность игры' if product.gaming_time
       end
     end
 
     def path_to_url(path)
       "http://#{@host.sub(%r[^http://],'')}/#{path.sub(%r[^/],'')}"
     end
-    
-    def players_count_info(product)
-      if product.min_players == product.max_players
-        product.min_players.to_s
-      elsif product.min_players && !product.max_players
-        product.min_players.to_s
-      else
-        product.min_players.to_s << "-" << product.max_players.to_s
-      end
-    end
+
   end
 end
