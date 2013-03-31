@@ -1,4 +1,4 @@
-class YandexMarketConfiguration < Configuration
+class Spree::YandexMarketConfiguration < Spree::Preferences::Configuration
   preference :category,        :string
   preference :currency,        :string
   preference :wares,           :string,  :default => "active"
@@ -12,8 +12,8 @@ class YandexMarketConfiguration < Configuration
   preference :email,           :string
   preference :local_delivery_cost, :float # стоимость доставки по своему региону
 
-  
-  # wares property 
+
+                                                                                      # wares property
   preference :type_prefix,     :string, :default => "prefix"   # Группа товаров \ категория
   preference :vendor,          :string, :default => "vendor"        # Производитель
   preference :model,           :string, :default => "model"         # Модель
@@ -21,8 +21,8 @@ class YandexMarketConfiguration < Configuration
   preference :country_of_manufacturer, :string, :default => "country_of_manufacturer" #страны производства товара.
   preference :manufacturer_warranty, :string, :default => "manufacturer_warranty" # есть официальная гарантию производителя.
   preference :wares_type,      :string, :default => "wares_type"   # Тип Товара
-  
-  # wares property Книги и АудиоКниги
+
+                                         # wares property Книги и АудиоКниги
   preference :author, :string            # Автор книги
   preference :publisher, :string         # Издательство
   preference :series, :string            # Серия
@@ -37,24 +37,24 @@ class YandexMarketConfiguration < Configuration
   preference :storage, :string           # Носитель, на котором поставляется аудиокнига.
   preference :format, :string            # Формат аудиокниги.
   preference :recording_length , :string # Время звучания задается в формате mm.ss (минуты.секунды).
-  
-  # wares property Музыка и Видео
+
+                                          # wares property Музыка и Видео
   preference :artist , :string          # Исполнитель
-  preference :title , :string           # Наименование 
+  preference :title , :string           # Наименование
   preference :music_video_year, :string # Год
   preference :media , :string           # Носитель
   preference :starring , :string        # Актеры
   preference :director , :string        # Режиссер
   preference :original_name , :string     # Оригинальное наименовани
   preference :video_country, :string    # Страна
-  
-  # wares property Билеты
+
+                                     # wares property Билеты
   preference :place, :string         # Место мероприятия
   preference :hall, :string          # Зал
   preference :hall_url_plan, :string # Ссылка на картинку версии зала
   preference :event_date, :string    # Дата и время сеанса. Указываются в формате ISO 8601: YYYY-MM-DDThh:mm
   preference :is_premiere, :string   # Признак премьерности мероприятия
   preference :is_kids, :string       # Признак детского мероприятия
-  
+
 end
 
