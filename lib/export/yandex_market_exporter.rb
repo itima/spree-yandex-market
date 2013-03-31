@@ -13,7 +13,7 @@ module Export
     end
     
     def export
-      @config = Spree::YandexMarket::Config.instance
+      @config = SpreeYandexMarket::Config.instance
       @host = @config.preferred_url.sub(%r[^http://],'').sub(%r[/$], '')
 
       @currencies = @config.preferred_currency.split(';').map{ |x| x.split(':') }

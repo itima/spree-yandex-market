@@ -13,7 +13,7 @@ module Export
     
     def export
       # @config = ::TorgMailRu.find_or_create_by_name('Default configuration')
-      @config = ::YandexMarket.first
+      @config = SpreeYandexMarket::Config.instance
       @host = @config.preferred_url.sub(%r[^http://],'').sub(%r[/$], '')
       ActionController::Base.asset_host = @config.preferred_url
       
