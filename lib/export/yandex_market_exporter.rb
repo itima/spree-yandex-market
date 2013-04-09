@@ -86,8 +86,8 @@ module Export
         product.images.take(10).each do |image|
           xml.picture path_to_url(image.attachment.url(:large, false))
         end
-        xml.store true 
-        xml.pickup true
+        xml.store false
+        xml.pickup false
         xml.delivery true
         xml.name "#{product.name}"
         xml.description strip_tags(product.description) if product.description
