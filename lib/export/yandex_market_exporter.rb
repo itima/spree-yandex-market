@@ -59,7 +59,7 @@ module Export
             }
 
             xml.offers { # список товаров
-              products = Spree::Product.in_taxon(@preferred_category).activemaster_price_gte(1).where(:export_to_yandex_market => true).uniq
+              products = Spree::Product.in_taxon(@preferred_category).active.master_price_gte(1).where(:export_to_yandex_market => true).uniq
               products.each do |product|
                 offer_vendor_model(xml, product)
               end
