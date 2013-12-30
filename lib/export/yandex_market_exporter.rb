@@ -20,7 +20,9 @@ module Export
       @currencies.first[1] = 1
       
       @preferred_category = Spree::Taxon.find_by_name(@config[:category])
-      unless @preferred_category.export_to_yandex_market
+      unless @preferred_category && @preferred_category.export_to_yandex_market
+        Rails.logger.error("[ yandex_market ] ERROR WHEN EXPORT")
+        Rails.logger.error("[ yandex_market ] #{@config.parameters.to_yaml}") if @config.parameters
         raise "Preferred category <#{@preferred_category.name}> not included to export"
       end
 
